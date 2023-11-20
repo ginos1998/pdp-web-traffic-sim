@@ -1,2 +1,2 @@
 # pdp-web-traffic-sim
-Simulador de trafico web
+Web Traffic Simulator
