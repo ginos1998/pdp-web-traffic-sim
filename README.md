@@ -1,2 +1,2 @@
 # pdp-web-traffic-sim
-Web Traffic Simulator
+Simulador trafico Web utilizando programacion orientada a objetos. Trabajo practico 2 de Paradigmas de programacion
