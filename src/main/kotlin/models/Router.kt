@@ -1,17 +1,23 @@
 package models
 
+import java.util.LinkedList
 import java.util.Queue
 
 class Router (
     private var routerId: Int = 0,
     private var routerName: String = "",
-    private var routerTable: List<Router>,
+    private var routerTable: MutableList<Router>,
     private var terminalTable: List<Terminal>,
     private var inputBuffer: Queue<Page>,
     private var outputBuffer: Map<Int, Queue<Package>>, // key: routerId, value: queue of packages
     private var routerPath: Map<Terminal, List<Router>>
 )
 {
+    constructor():
+            this(0, "", mutableListOf(), listOf(), LinkedList(), mapOf(), mapOf())
+    constructor(routerId: Int, routerName: String):
+            this(routerId, routerName, mutableListOf(), listOf(), LinkedList(), mapOf(), mapOf())
+
     // getters and setters
     fun getRouterId(): Int {
         return routerId
@@ -29,11 +35,11 @@ class Router (
         this.routerName = routerName
     }
 
-    fun getRouterTable(): List<Router> {
+    fun getRouterTable(): MutableList<Router> {
         return routerTable
     }
 
-    fun setRouterTable(routerTable: List<Router>) {
+    fun setRouterTable(routerTable: MutableList<Router>) {
         this.routerTable = routerTable
     }
 

@@ -1,6 +1,8 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import controllers.AdminController
 
+fun main() {
+    val filepath = "/home/ginos/Documentos/test.xlsx"
 
-    println("Program arguments: ${args.joinToString()}")
+    val adminController = AdminController()
+    adminController.readFromExcelFile(filepath)
 }

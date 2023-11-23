@@ -7,6 +7,8 @@ class Terminal (
     private var router: Router
 )
 {
+    constructor(terminalId: Int, terminalName: String):
+            this(terminalId, terminalName, Page(), Router())
     // getters and setters
     fun getTerminalId(): Int {
         return terminalId
