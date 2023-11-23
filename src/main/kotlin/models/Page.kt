@@ -2,7 +2,7 @@ package models
 
 class Page (
     private var pageId: Int = 0,
-    private var pageName: String = "",
+    private var pageContent: String = "",
     private var size: Int = 0,
     private var destinationRouterId: Int = 0,
     private var originRouterId: Int = 0,
@@ -16,12 +16,12 @@ class Page (
         this.pageId = pageId
     }
 
-    fun getPageName(): String {
-        return pageName
+    fun getPageContent(): String {
+        return pageContent
     }
 
     fun setPageName(pageName: String) {
-        this.pageName = pageName
+        this.pageContent = pageName
     }
 
     fun getSize(): Int {

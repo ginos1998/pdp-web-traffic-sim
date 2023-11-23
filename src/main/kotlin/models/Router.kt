@@ -3,18 +3,19 @@ package models
 import java.util.Queue
 
 class Router (
-    private var routerId: Int = 0,
-    private var routerName: String = "",
-    private var routerTable: List<Router>,
-    private var terminalTable: List<Terminal>,
-    private var inputBuffer: Queue<Page>,
-    private var outputBuffer: Map<Int, Queue<Package>>, // key: routerId, value: queue of packages
-    private var routerPath: Map<Terminal, List<Router>>
+        private var routerId: Int = 0,
+        private var routerName: String = "",
+        private var routerTable: ArrayList<Router> = ArrayList(),
+        private var terminalTable: ArrayList<Terminal> = ArrayList(),
+        private var pagesReceived: Queue<Page>, //este atributo almacena la paginas nuevas que llegan al router para posteriormente poder segmentarlas
+        private var inputBuffer: Queue<Package>,
+        private var outputBuffer: Map<Int, Queue<Package>>, // key: routerId, value: queue of packages
+        private var routerPath: Map<Terminal, List<Router>>
 )
 {
     // getters and setters
     fun getRouterId(): Int {
-        return routerId
+        return this.routerId
     }
 
     fun setRouterId(routerId: Int) {
@@ -22,39 +23,39 @@ class Router (
     }
 
     fun getRouterName(): String {
-        return routerName
+        return this.routerName
     }
 
     fun setRouterName(routerName: String) {
         this.routerName = routerName
     }
 
-    fun getRouterTable(): List<Router> {
-        return routerTable
+    fun getRouterTable(): ArrayList<Router> {
+        return this.routerTable
     }
 
-    fun setRouterTable(routerTable: List<Router>) {
+    fun setRouterTable(routerTable: ArrayList<Router>) {
         this.routerTable = routerTable
     }
 
-    fun getTerminalTable(): List<Terminal> {
-        return terminalTable
+    fun getTerminalTable(): ArrayList<Terminal> {
+        return this.terminalTable
     }
 
-    fun setTerminalTable(terminalTable: List<Terminal>) {
+    fun setTerminalTable(terminalTable: ArrayList<Terminal>) {
         this.terminalTable = terminalTable
     }
 
-    fun getInputBuffer(): Queue<Page> {
-        return inputBuffer
+    fun getInputBuffer(): Queue<Package> {
+        return this.inputBuffer
     }
 
-    fun setInputBuffer(inputBuffer: Queue<Page>) {
+    fun setInputBuffer(inputBuffer: Queue<Package>) {
         this.inputBuffer = inputBuffer
     }
 
     fun getOutputBuffer(): Map<Int, Queue<Package>> {
-        return outputBuffer
+        return this.outputBuffer
     }
 
     fun setOutputBuffer(outputBuffer: Map<Int, Queue<Package>>) {
@@ -62,10 +63,18 @@ class Router (
     }
 
     fun getRouterPath(): Map<Terminal, List<Router>> {
-        return routerPath
+        return this.routerPath
     }
 
     fun setRouterPath(routerPath: Map<Terminal, List<Router>>) {
         this.routerPath = routerPath
+    }
+
+    fun getReceivedPages(): Queue<Page>{
+        return this.pagesReceived
+    }
+
+    fun setPagesReceived(pagesReceived: Queue<Page>){
+        this.pagesReceived = pagesReceived
     }
 }
