@@ -4,6 +4,7 @@ class Terminal (
     private var terminalId: Int = 0,
     private var terminalName: String = "",
     private var page: Page,
+    private var receivedPage: Page,
     private var router: Router
 )
 {
@@ -40,4 +41,11 @@ class Terminal (
         this.router = router
     }
 
+    fun getReceivedPage(): Page{
+        return receivedPage
+    }
+
+    fun setReceivedPage(page: Page){
+        this.receivedPage = page
+    }
 }
