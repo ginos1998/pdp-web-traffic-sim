@@ -12,6 +12,10 @@ class CommonFunctions {
             return data != 0
         }
 
+        fun <T> hasData(list: MutableList<T>): Boolean {
+            return list.isNotEmpty()
+        }
+
         fun isCellEmpty(sheet: Sheet, column: Int, nextRow: Int) : Boolean {
             return sheet.getRow(nextRow) != null && sheet.getRow(nextRow).getCell(column) != null
         }
