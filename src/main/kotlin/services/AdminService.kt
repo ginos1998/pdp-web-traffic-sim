@@ -29,8 +29,8 @@ class AdminService {
      * @param filepath: String - Ruta del archivo de excel.
      * @return WebSimulator - Objeto con los routers y terminales.
      */
-    fun readFromExcelFile(filepath: String): WebSimulator {
-        return try {
+    fun readFromExcelFile(filepath: String) {
+        try {
             val inputStream = FileInputStream(filepath)
             val xlWb = WorkbookFactory.create(inputStream)
 
@@ -39,11 +39,11 @@ class AdminService {
             val terminalList: MutableList<Terminal> = readTerminalsFromFile(xlWb)
 
             inputStream.close()
+            xlWb.close()
 
-            WebSimulator(routerList, terminalList)
+            WebSimulator.getInstance(routerList, terminalList)
         } catch (e: Exception) {
             println("Ha ocurrido un error al leer el archivo de excel: ${e.message}")
-            WebSimulator()
         }
 
     }

@@ -4,7 +4,8 @@ class Terminal (
     private var terminalId: Int = 0,
     private var terminalName: String = "",
     private var page: Page,
-    private var router: Router
+    private var router: Router,
+    private var receivedPageList: MutableList<Page> = mutableListOf(),
 )
 {
     constructor(terminalId: Int, terminalName: String):
@@ -40,6 +41,14 @@ class Terminal (
 
     fun setRouter(router: Router) {
         this.router = router
+    }
+
+    fun getReceivedPageList(): MutableList<Page> {
+        return receivedPageList
+    }
+
+    fun setReceivedPageList(receivedPageList: MutableList<Page>) {
+        this.receivedPageList = receivedPageList
     }
 
 }
