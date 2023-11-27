@@ -4,6 +4,7 @@ import models.Package
 import services.RouterServices
 import models.Router
 import models.Page
+import java.util.Queue
 
 
 class RouterController (
@@ -31,10 +32,18 @@ class RouterController (
                 pack = routerServices.createPackage(substring, page, id)
                 if (neighbour){
                     pack.setNextIP(page.getDestinationIP())
-                    routerServices.sendPackage(router, pack)
+                    routerServices.queuePackages(router, pack)
                 }
                 i += ab
                 id ++
+            }
+        }
+    }
+
+    fun sendPackages(router: Router, id: Int){
+        router.getRouterTable().forEach {
+            r -> if(r.getRouterId() == id) {
+            router.getOutputBuffer()[id]?.let { r.setInputBuffer(it) }
             }
         }
     }
