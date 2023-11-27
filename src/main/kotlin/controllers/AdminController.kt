@@ -1,12 +1,11 @@
 package controllers
 
-import models.dtos.WebSimulator
 import services.AdminService
 
 class AdminController() {
     private val adminService: AdminService = AdminService()
 
-    fun readFromExcelFile(filepath: String) : WebSimulator {
+    fun readFromExcelFile(filepath: String) {
         return adminService.readFromExcelFile(filepath)
     }
 }
