@@ -16,26 +16,18 @@ class RouterController (
     }
 
     fun pageSegmentation(router: Router, page: Page, ab: Int){
-        var i = 0
-        var id = 1
-        var pack: Package
-
         val neighbour = routerServices.checkNeigbourghs(router, page.getDestinationRouterId())
 
-        if(page.getOriginRouterId() == page.getDestinationRouterId()){
-            //directamente mandamos la pagina a la terminal que corresponda
-            router.getTerminalTable()[page.getDestinationIP().getTerminalId()-1].getReceivedPages().add(page) //esta linea setea "received page con la pagina recibida"
+        if (page.getOriginRouterId() == page.getDestinationRouterId()) {
+            router.getTerminalTable()[page.getDestinationIP().getTerminalId() - 1].getReceivedPages().add(page)
         } else {
-            while(i < page.getPageContent().length){
-                val supLimit = minOf(i+ab, page.getPageContent().length)
-                val substring = page.getPageContent().substring(i, supLimit)
-                pack = routerServices.createPackage(substring, page, id)
-                if (neighbour){
+            val packages = page.getPageContent().chunked(ab).fold(1) { acc, substring ->
+                val pack = routerServices.createPackage(substring, page, acc)
+                if (neighbour) {
                     pack.setNextIP(page.getDestinationIP())
                     routerServices.queuePackages(router, pack)
                 }
-                i += ab
-                id ++
+                acc + 1
             }
         }
     }
