@@ -1,5 +1,6 @@
 package models
 
+import java.util.LinkedList
 import java.util.Queue
 
 class Router (
@@ -10,7 +11,7 @@ class Router (
         private var pagesReceived: Queue<Page>, //este atributo almacena la paginas nuevas que llegan al router para posteriormente poder segmentarlas
         private var inputBuffer: Queue<Package>,
         private var outputBuffer: Map<Int, Queue<Package>>, // key: routerId, value: queue of packages
-        private var routerPath: Map<Terminal, List<Router>>
+        private var routerPath: Map<Router, LinkedList<Router>>
 )
 {
     // getters and setters
@@ -62,11 +63,11 @@ class Router (
         this.outputBuffer = outputBuffer
     }
 
-    fun getRouterPath(): Map<Terminal, List<Router>> {
+    fun getRouterPath(): Map<Router, LinkedList<Router>> {
         return this.routerPath
     }
 
-    fun setRouterPath(routerPath: Map<Terminal, List<Router>>) {
+    fun setRouterPath(routerPath: Map<Router, LinkedList<Router>>) {
         this.routerPath = routerPath
     }
 

@@ -2,7 +2,7 @@ package models
 
 class Package( // constructor
     private var packageId: Int,
-    private var packageName: String,
+    private var packageContent: String,
     private var pageId: Int,
     private var totalPackages: Int,
     private var destinationIP: IP,
@@ -19,12 +19,12 @@ class Package( // constructor
         this.packageId = packageId
     }
 
-    fun getPackageName(): String {
-        return packageName
+    fun getPackageContent(): String {
+        return packageContent
     }
 
-    fun setPackageName(packageName: String) {
-        this.packageName = packageName
+    fun setPackageContent(packageName: String) {
+        this.packageContent = packageName
     }
 
     fun getPageId(): Int {
