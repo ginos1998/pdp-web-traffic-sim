@@ -1,12 +1,13 @@
 package models
 
+import java.util.Queue
+import models.Page
 class Terminal (
     private var terminalId: Int = 0,
     private var terminalName: String = "",
-    private var page: Page,
-    private var router: Router,
-    private var receivedPageList: MutableList<Page> = mutableListOf(),
-)
+    private var receivedPages: Queue<Page>,
+    private var router: Router
+    )
 {
     constructor(terminalId: Int, terminalName: String):
             this(terminalId, terminalName, Page(), Router())
@@ -27,14 +28,6 @@ class Terminal (
         this.terminalName = terminalName
     }
 
-    fun getPage(): Page {
-        return page
-    }
-
-    fun setPage(page: Page) {
-        this.page = page
-    }
-
     fun getRouter(): Router {
         return router
     }
@@ -43,12 +36,11 @@ class Terminal (
         this.router = router
     }
 
-    fun getReceivedPageList(): MutableList<Page> {
-        return receivedPageList
+    fun getReceivedPages(): Queue<Page>{
+        return receivedPages
     }
 
-    fun setReceivedPageList(receivedPageList: MutableList<Page>) {
-        this.receivedPageList = receivedPageList
+    fun setReceivedPages(pages: Queue<Page>){
+        this.receivedPages = pages
     }
-
 }

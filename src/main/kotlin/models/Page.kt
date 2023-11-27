@@ -2,10 +2,10 @@ package models
 
 class Page (
     private var pageId: Int = 0,
-    private var pageName: String = "",
+    private var pageContent: String = "",
     private var size: Int = 0,
-    private var destinationRouterId: Int = 0,
-    private var originRouterId: Int = 0,
+    private var destinationIP: IP = IP(0,0),
+    private var originIP: IP = IP(0,0)
 ){
     // getters and setters
     fun getPageId(): Int {
@@ -16,12 +16,12 @@ class Page (
         this.pageId = pageId
     }
 
-    fun getPageName(): String {
-        return pageName
+    fun getPageContent(): String {
+        return pageContent
     }
 
     fun setPageName(pageName: String) {
-        this.pageName = pageName
+        this.pageContent = pageName
     }
 
     fun getSize(): Int {
@@ -33,18 +33,34 @@ class Page (
     }
 
     fun getDestinationRouterId(): Int {
-        return destinationRouterId
+        return destinationIP.getRouterID()
     }
 
-    fun setDestinationRouterId(destinationRouterId: Int) {
-        this.destinationRouterId = destinationRouterId
+    fun setDestinationRouterId(destinationId: Int) {
+        this.destinationIP.setRouterID(destinationId)
     }
 
     fun getOriginRouterId(): Int {
-        return originRouterId
+        return originIP.getRouterID()
     }
 
-    fun setOriginRouterId(originRouterId: Int) {
-        this.originRouterId = originRouterId
+    fun setOriginRouterId(originId: Int) {
+        this.originIP.setRouterID(originId)
+    }
+
+    fun getOriginIP(): IP{
+        return originIP
+    }
+
+    fun setOriginIP(ip:IP){
+        this.originIP = ip
+    }
+
+    fun getDestinationIP(): IP{
+        return destinationIP
+    }
+
+    fun setDestinationIP(ip:IP){
+        this.destinationIP = ip
     }
 }
