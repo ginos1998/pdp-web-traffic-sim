@@ -16,13 +16,15 @@ class RouterController  (
     constructor():
             this(RouterServices(), TerminalService())
     
-    fun resentPackagesOrBuildPage(actualRouter: Router) {
+    fun resentPackagesOrBuildPage(actualRouter: Router, page: Page, ab: Int) {
         if (actualRouter.getOutputBuffer().isNotEmpty()) {
             if (isPackageInDestiny(actualRouter) && isReadyToBuildPage(actualRouter) ) {
                 buildPage(actualRouter)?.let { terminalService.receivePage(it) }
             } else {
-                // reenviar a router vecino
+                pageSegmentation(actualRouter, page, ab)
             }
+        } else {
+            pageSegmentation(actualRouter, page, ab)
         }
     }
     private fun isPackageInDestiny(actualRouter: Router): Boolean {
@@ -41,20 +43,15 @@ class RouterController  (
         routerServices.addPage(router, page)  //le resto 1 al ID origen pq el array list indexa desde el 0
     }
 
-    fun pageSegmentation(router: Router, page: Page, ab: Int){
-        val neighbour = routerServices.checkNeigbourghs(router, page.getDestinationRouterId())
-
-        if (page.getOriginRouterId() == page.getDestinationRouterId()) {
-            router.getTerminalTable()[page.getDestinationIP().getTerminalId() - 1].getReceivedPages().add(page)
-        } else {
-            val packages = page.getPageContent().chunked(ab).fold(1) { acc, substring ->
-                val pack = routerServices.createPackage(substring, page, acc)
-                if (neighbour) {
-                    pack.setNextIP(page.getDestinationIP())
-                    routerServices.queuePackages(router, pack)
-                }
-                acc + 1
+    private fun pageSegmentation(router: Router, page: Page, ab: Int){
+        page.getPageContent().chunked(ab).fold(1) { acc, substring ->
+            val pack = routerServices.createPackage(substring, page, acc)
+            val neighbour = routerServices.checkNeigbourghs(router, page.getDestinationRouterId())
+            if (neighbour) {
+                pack.setNextIP(page.getDestinationIP())
+                routerServices.queuePackages(router, pack)
             }
+            acc + 1
         }
     }
 

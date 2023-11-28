@@ -27,12 +27,12 @@ class RouterServices {
                     var packConNumeroMasAlto: Package = queue.peek()
 
                     queue.forEach { pack ->
-                        if (pack.getNumber() > packConNumeroMasAlto.getNumber()) {
+                        if (pack.getPackageId() > packConNumeroMasAlto.getPackageId()) {
                             packConNumeroMasAlto = pack
                         }
                     }
 
-                    ready = packConNumeroMasAlto.getNumber() == packConNumeroMasAlto.getTotalPackages()
+                    ready = packConNumeroMasAlto.getPackageId() == packConNumeroMasAlto.getTotalPackages()
                 }
             }
 
@@ -44,7 +44,7 @@ class RouterServices {
         var pageName = ""
         actualRouter.getOutputBuffer()[actualRouter.getRouterId()]
             ?.forEach { pack ->
-                pageName += pack.getPackageName()
+                pageName += pack.getPackageContent()
             }
 
         return somePackage?.let {
@@ -52,8 +52,8 @@ class RouterServices {
                 it.getPageId(),
                 pageName,
                 somePackage.getTotalPackages(),
-                somePackage.getDestinationIP().getRouterID(),
-                somePackage.getOriginIP().getRouterID()
+                somePackage.getDestinationIP(),
+                somePackage.getNextIP()
             )
         }
 
@@ -73,12 +73,16 @@ class RouterServices {
 
     fun queuePackages(router: Router, pack: Package){
         if(pack.getActualIP().getRouterID() != pack.getDestinationIP().getRouterID()){
-            //esta parte se tiene que revisar una vez que integremos las partes, ya que necesito saber como vamos a estructurar el mapa de caminos
             router.getOutputBuffer()[pack.getNextIP().getRouterID()]?.add(pack) //desde router, obtengo el mapa de outputBuffers de sus vecinos, luego obtengo la cola del siguiente vecino en el camino de pack, y finalmente añado pack a esa cola
         }
     }
 
-    fun checkNeigbourghs(router:Router, id: Int): Boolean{
-        return router.getOutputBuffer().containsKey(id)
+    fun checkNeigbourghs(router: Router, destinationRouterId: Int): Boolean {
+        router.getRouterTable().forEach { r ->
+            if (r.getRouterId() == destinationRouterId) {
+                return true
+            }
+        }
+        return false
     }
 }

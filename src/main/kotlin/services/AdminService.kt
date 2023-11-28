@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import utils.CommonFunctions
 import java.io.FileInputStream
+import java.util.*
 
 class AdminService {
     private val sheetRouter: Int = 0
@@ -104,6 +105,11 @@ class AdminService {
                         routerList.find { router -> router.getRouterId() == neighbourId }!!
                     )
 
+                    routerList.forEach { router ->
+                        if (router.getRouterId() == routerId) {
+                            router.getOutputBuffer()[neighbourId] = LinkedList()
+                        }
+                    }
                 }
             } else {
                 eof = true

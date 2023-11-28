@@ -1,7 +1,7 @@
 package models
 
-import java.util.Queue
-import models.Page
+import java.util.*
+
 class Terminal (
     private var terminalId: Int = 0,
     private var terminalName: String = "",
@@ -10,7 +10,8 @@ class Terminal (
     )
 {
     constructor(terminalId: Int, terminalName: String):
-            this(terminalId, terminalName, Page(), Router())
+            this(terminalId, terminalName, LinkedList<Page>(), Router())
+
     // getters and setters
     fun getTerminalId(): Int {
         return terminalId

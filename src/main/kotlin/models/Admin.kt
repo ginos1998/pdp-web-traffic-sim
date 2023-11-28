@@ -1,15 +1,15 @@
 package models
 
 class Admin (
-    private var routerList: List<Router>,
+    private var routerList: MutableList<Router>,
     private var cicleTime: Int
 ) {
     // getters and setters
-    fun getRouterList(): List<Router> {
+    fun getRouterList(): MutableList<Router> {
         return routerList
     }
 
-    fun setRouterList(routerList: List<Router>) {
+    fun setRouterList(routerList: MutableList<Router>) {
         this.routerList = routerList
     }
 
