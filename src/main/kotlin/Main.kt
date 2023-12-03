@@ -15,7 +15,11 @@ fun main() {
     adminController.readFromExcelFile(filepath)
 
     var i = 1
-    while (true) {
+    var cicles = 1
+    var endOfSim = false
+    WebSimulator.getInstance().setCicleTime(2)
+
+    while (!endOfSim) {
         WebSimulator.getInstance().getRouterList().forEach { router ->
             println("########## ROUTER ${router.getRouterName()} ##########")
             var somePage = Page()
@@ -37,6 +41,30 @@ fun main() {
 
             Thread.sleep(1000)
         }
+
+        if (cicles++ == WebSimulator.getInstance().getCicleTime()) {
+            printPagesReceivedByTerminal()
+            cicles = 1
+            print("Han pasado dos ciclos de simulacion, continuar? (y/n): ")
+            val input = readlnOrNull()
+            if (!input.contentEquals("y")) {
+                endOfSim = true
+            }
+        }
     }
 
+}
+
+fun printPagesReceivedByTerminal() {
+    WebSimulator.getInstance().getTerminalList().forEach { terminal ->
+        if (terminal.getReceivedPages().isEmpty()) {
+            return@forEach
+        }
+
+        println("########## TERMINAL ${terminal.getTerminalName()} ##########")
+        terminal.getReceivedPages().forEach { page ->
+            println("Pagina ${page.getPageId()} recibida: ${page.getPageContent()}")
+        }
+        println("###############################################\n")
+    }
 }
