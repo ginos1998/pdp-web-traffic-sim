@@ -10,23 +10,34 @@ import java.util.Queue
 
 class RouterController  (
     private var routerServices: RouterServices,
-    private var terminalService: TerminalService
+    private var terminalService: TerminalService,
 )
 {
     constructor():
             this(RouterServices(), TerminalService())
-    
-    fun resentPackagesOrBuildPage(actualRouter: Router, page: Page, ab: Int) {
-        if (actualRouter.getOutputBuffer().isNotEmpty()) {
-            if (isPackageInDestiny(actualRouter) && isReadyToBuildPage(actualRouter) ) {
-                buildPage(actualRouter)?.let { terminalService.receivePage(it) }
-            } else {
-                pageSegmentation(actualRouter, page, ab)
-            }
-        } else {
-            pageSegmentation(actualRouter, page, ab)
-        }
+
+    fun resentPackagesToNeighbourRouter(actualRouter: Router) {
+        routerServices.resentPackagesToNeighbourRouter(actualRouter)
     }
+
+    fun readInputBufferAndProcessPackages(actualRouter: Router) {
+        routerServices.readInputBufferAndProcessPackages(actualRouter)
+    }
+    
+    fun resentPackagesOrBuildPage(actualRouter: Router) {
+        actualRouter.getOutputBufferTerminal().forEach { (terminalId, queue) ->
+            if (arePackagesInDestinyAndReadyToBuildPage(actualRouter, queue)) {
+                println("El router ${actualRouter.getRouterName()} esta listo para construir una pagina y enviarla a la terminal $terminalId..")
+                buildPage(queue)?.let { terminalService.receivePage(it) }
+            }
+        }
+
+    }
+
+    private fun arePackagesInDestinyAndReadyToBuildPage(actualRouter: Router, queue: Queue<Package>): Boolean {
+        return routerServices.arePackagesInDestinyAndReadyToBuildPage(actualRouter, queue)
+    }
+
     private fun isPackageInDestiny(actualRouter: Router): Boolean {
         return routerServices.isPackageInDestiny(actualRouter)
     }
@@ -35,24 +46,16 @@ class RouterController  (
         return routerServices.isReadyToBuildPage(actualRouter)
     }
     
-    private fun buildPage(actualRouter: Router) : Page? {
-        return routerServices.buildPage(actualRouter)
+    private fun buildPage(queue: Queue<Package>) : Page? {
+        return routerServices.buildPage(queue)
     }
 
     fun receivePages(router: Router, page: Page){
-        routerServices.addPage(router, page)  //le resto 1 al ID origen pq el array list indexa desde el 0
+        routerServices.receivePages(router, page)
     }
 
-    private fun pageSegmentation(router: Router, page: Page, ab: Int){
-        page.getPageContent().chunked(ab).fold(1) { acc, substring ->
-            val pack = routerServices.createPackage(substring, page, acc)
-            val neighbour = routerServices.checkNeigbourghs(router, page.getDestinationRouterId())
-            if (neighbour) {
-                pack.setNextIP(page.getDestinationIP())
-                routerServices.queuePackages(router, pack)
-            }
-            acc + 1
-        }
+    fun pageSegmentation(router: Router, page: Page, ab: Int){
+        routerServices.pageSegmentation(router, page, ab)
     }
 
     fun sendPackages(router: Router, id: Int){

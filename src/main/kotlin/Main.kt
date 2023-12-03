@@ -1,8 +1,8 @@
 import controllers.AdminController
+import controllers.PageController
 import controllers.RouterController
 import models.*
 import models.dtos.WebSimulator
-import java.util.*
 
 fun main() {
 
@@ -10,90 +10,33 @@ fun main() {
 
     val adminController = AdminController()
     val routerController = RouterController()
+    val pageController = PageController()
 
     adminController.readFromExcelFile(filepath)
 
-    if (WebSimulator.getInstance().getRouterList().isNotEmpty() && WebSimulator.getInstance().getTerminalList().isNotEmpty()) {
+    var i = 1
+    while (true) {
         WebSimulator.getInstance().getRouterList().forEach { router ->
-            println("Router: ${router.getRouterName()} (${router.getRouterId()})")
-            router.getRouterTable().forEach { neighbour ->
-                println("Vecino: ${neighbour.getRouterName()} (${neighbour.getRouterId()})")
+            println("########## ROUTER ${router.getRouterName()} ##########")
+            var somePage = Page()
+            if (i++==1) {
+                somePage = pageController.buildRandomPage()
             }
-            println("----------------------------------")
-        }
+            val ab = 3 //3 bytes por segundo
 
-        WebSimulator.getInstance().getTerminalList().forEach { terminal ->
-            println("Terminal: ${terminal.getTerminalName()} (${terminal.getTerminalId()})")
+            if (router.getRouterId() == somePage.getOriginIP().getRouterID()) {
+                routerController.receivePages(router, somePage)
+                routerController.pageSegmentation(router, somePage, ab)
+            }
+
+            routerController.resentPackagesOrBuildPage(router)
+            routerController.resentPackagesToNeighbourRouter(router)
+            routerController.readInputBufferAndProcessPackages(router)
+
+            println("###############################################\n")
+
+            Thread.sleep(1000)
         }
     }
 
-
-    WebSimulator.getInstance().getRouterList().forEach { router ->
-        val ip_o = IP(1, 1)
-        val ip_d = IP(2, 1)
-
-        val ab = 3 //3 bytes por segundo
-        val msg = "Hola mundo"
-        val page = Page(1, msg, msg.length, ip_d, ip_o)
-        routerController.receivePages(router, page) //envio la pagina desde una terminal conectada al router1 hacia este ultimo
-        routerController.resentPackagesOrBuildPage(router, page, ab)
-
-        println("router ${router.getOutputBuffer().size}")
-
-
-    }
-
-//    val ipDemo = IP(1, 1)
-//    val packageDemo = Package(1, "bokaaa", 1, 1, ipDemo, ipDemo, ipDemo)
-//    val packageQueue: Queue<Package> = LinkedList()
-//    packageQueue.add(packageDemo)
-//    val map: Map<Int, Queue<Package>> = mapOf(1 to packageQueue)
-//    WebSimulator.getInstance().getRouterList()[0].setOutputBuffer(map)
-//
-//    routerController.resentPackagesOrBuildPage(WebSimulator.getInstance().getRouterList()[0])
-//
-//    if (WebSimulator.getInstance().getTerminalList()[0].getReceivedPages().isNotEmpty()) {
-//        println("nombre " + WebSimulator.getInstance().getTerminalList()[0].getReceivedPages().peek().getPageContent()) // bokaaa
-//    }
-//
-//    val routers = ArrayList<Router>()
-//
-//    val ip_o = IP(1,1)
-//    val ip_d = IP(2,1)
-//
-//    val ab = 3 //2 bytes por segundo
-//
-//    val outBuffR12: Queue<Package> = LinkedList()
-//    val outMapR1 = mutableMapOf<Int, Queue<Package>>()
-//    outMapR1[2] = outBuffR12
-//
-//    val page = Page(1, "Hola mundo",0,ip_d,ip_o)
-//    page.setSize(page.getPageContent().length)
-//
-//    val router1 = Router(1,"", ArrayList(), ArrayList(),LinkedList(),LinkedList(), outMapR1, mutableMapOf())
-//    val router2 = Router(2,"", ArrayList(), ArrayList(),LinkedList(),LinkedList(), mutableMapOf(), mutableMapOf())
-//
-//    val term1 = Terminal(1,"", LinkedList(), router1)
-//    val term2 = Terminal(2,"", LinkedList(), router1)
-//    val term3 = Terminal(1,"", LinkedList(), router2)
-//
-//    val terminalRouter1 = ArrayList<Terminal>()
-//    val terminalRouter2 = ArrayList<Terminal>()
-//
-//    terminalRouter1.add(term1)
-//    terminalRouter1.add(term2)
-//    terminalRouter2.add(term3)
-//
-//    router1.setTerminalTable(terminalRouter1)
-//
-//    routers.add(router1)
-//    routers.add(router2)
-//
-//    routerController.receivePages(router1, page) //envio la pagina desde una terminal conectada al router1 hacia este ultimo
-//    routerController.pageSegmentation(router1, page, ab)
-//    println("Segmentado...")
-//
-//    router2.getInputBuffer().forEach { ib ->
-//        println("Paquete: ${ib.getPackageContent()}")
-//    }
 }

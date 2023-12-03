@@ -11,13 +11,14 @@ class Router (
     private var pagesReceived: Queue<Page>, //este atributo almacena la paginas nuevas que llegan al router para posteriormente poder segmentarlas
     private var inputBuffer: Queue<Package>,
     private var outputBuffer: MutableMap<Int, Queue<Package>> = mutableMapOf(), // key: routerId, value: queue of packages
+    private var outputBufferTerminal: MutableMap<Int, Queue<Package>>, // key: terminalId, value: queue of packages
     private var routerPath: MutableMap<Router, LinkedList<Router>>
 )
 {
     constructor():
-            this(0, "", mutableListOf(), ArrayList(), LinkedList(), LinkedList(), mutableMapOf(), mutableMapOf())
+            this(0, "", mutableListOf(), ArrayList(), LinkedList(), LinkedList(), mutableMapOf(), mutableMapOf(), mutableMapOf())
     constructor(routerId: Int, routerName: String):
-            this(routerId, routerName, mutableListOf(), ArrayList(), LinkedList(), LinkedList(), mutableMapOf(), mutableMapOf())
+            this(routerId, routerName, mutableListOf(), ArrayList(), LinkedList(), LinkedList(), mutableMapOf(), mutableMapOf(),  mutableMapOf())
 
     // getters and setters
     fun getRouterId(): Int {
@@ -83,4 +84,13 @@ class Router (
     fun setPagesReceived(pagesReceived: Queue<Page>){
         this.pagesReceived = pagesReceived
     }
+
+    fun getOutputBufferTerminal(): MutableMap<Int, Queue<Package>> {
+        return this.outputBufferTerminal
+    }
+
+    fun setOutputBufferTerminal(outputBufferTerminal: MutableMap<Int, Queue<Package>>) {
+        this.outputBufferTerminal = outputBufferTerminal
+    }
+
 }

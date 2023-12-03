@@ -8,6 +8,7 @@ class TerminalService {
         WebSimulator.getInstance().getTerminalList().forEach { terminal ->
             if (terminal.getTerminalId() == page.getDestinationRouterId()) {
                 terminal.getReceivedPages().add(page)
+                println("La terminal ${terminal.getTerminalName()} recibió la pagina ${page.getPageId()} del router ${page.getOriginRouterId()}")
             }
         }
     }
