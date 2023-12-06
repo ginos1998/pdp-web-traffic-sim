@@ -5,6 +5,7 @@ import models.Router
 import models.Package
 import services.RouterServices
 import services.TerminalService
+import utils.ConsoleColors
 import java.util.Queue
 
 
@@ -27,7 +28,7 @@ class RouterController  (
     fun resentPackagesOrBuildPage(actualRouter: Router) {
         actualRouter.getOutputBufferTerminal().forEach { (terminalId, queue) ->
             if (arePackagesInDestinyAndReadyToBuildPage(actualRouter, queue)) {
-                println("El router ${actualRouter.getRouterName()} esta listo para construir una pagina y enviarla a la terminal $terminalId..")
+                println("${ConsoleColors.GREEN}El router ${actualRouter.getRouterName()} esta listo para construir una pagina y enviarla a la terminal $terminalId..${ConsoleColors.RESET}")
                 buildPage(queue)?.let { terminalService.receivePage(it) }
             }
         }

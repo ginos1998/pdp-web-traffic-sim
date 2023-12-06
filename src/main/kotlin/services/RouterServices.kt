@@ -5,6 +5,7 @@ import models.Router
 import models.Package
 import models.Page
 import models.dtos.WebSimulator
+import utils.ConsoleColors
 import java.util.*
 
 class RouterServices {
@@ -107,7 +108,7 @@ class RouterServices {
 
     fun pageSegmentation(router: Router, page: Page, bandWidth: Int){
         page.getPageContent().chunked(bandWidth).fold(1) { acc, substring ->
-            val nextRouterIp = dijkstraService.nextVertexInShortestPath(router.getRouterId(), page.getDestinationRouterId())
+            val nextRouterIp = dijkstraService.nextVertexInShortestPath(router.getRouterId(), page.getDestinationIP().getRouterID())
             val pack = nextRouterIp?.let { createPackage(substring, page, acc, it, bandWidth) }
             if (pack != null) {
                 queuePackages(router, pack)
@@ -141,12 +142,12 @@ class RouterServices {
 
     fun resentPackagesToNeighbourRouter(actualRouter: Router) {
         if (actualRouter.getRouterTable().isEmpty()) {
-            println("No hay vecinos para el router ${actualRouter.getRouterId()}")
+            println("${ConsoleColors.RED}No hay vecinos para el router ${actualRouter.getRouterId()}${ConsoleColors.RESET}")
             return
         }
 
         if (actualRouter.getOutputBuffer().isEmpty()) {
-            println("No hay paquetes para reenviar en el router ${actualRouter.getRouterId()}")
+            println("${ConsoleColors.RED}No hay paquetes para reenviar en el router ${actualRouter.getRouterId()}${ConsoleColors.RESET}")
             return
         }
 
@@ -156,7 +157,7 @@ class RouterServices {
                 ?.let { dijkstraService.nextVertexInShortestPath(actualRouter.getRouterId(), it.getRouterID()) }
             actualRouter.getRouterTable().forEach { neighbour ->
                 if (neighbour.getRouterId() == routerId && nextRouterId != null && nextRouterId == neighbour.getRouterId()) {
-                    println("Enviando paquete ${packageDto.getPackageId()} al router ${neighbour.getRouterId()} desde el router ${actualRouter.getRouterId()}")
+                    println("${ConsoleColors.BLUE}Enviando paquete ${packageDto.getPackageId()} al router ${neighbour.getRouterId()} desde el router ${actualRouter.getRouterId()}${ConsoleColors.RESET}")
                     WebSimulator.getInstance()
                         .getRouterList()
                         .find { router -> router.getRouterId() == neighbour.getRouterId() }
