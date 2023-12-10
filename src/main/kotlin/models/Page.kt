@@ -32,14 +32,6 @@ class Page (
         this.size = size
     }
 
-    fun getDestinationRouterId(): Int {
-        return destinationIP.getRouterID()
-    }
-
-    fun setDestinationRouterId(destinationId: Int) {
-        this.destinationIP.setRouterID(destinationId)
-    }
-
     fun getOriginRouterId(): Int {
         return originIP.getRouterID()
     }
@@ -62,5 +54,9 @@ class Page (
 
     fun setDestinationIP(ip:IP){
         this.destinationIP = ip
+    }
+
+    override fun toString(): String {
+        return "Page(pageId=$pageId, pageContent='$pageContent', size=$size, destinationIP=$destinationIP, originIP=$originIP)"
     }
 }

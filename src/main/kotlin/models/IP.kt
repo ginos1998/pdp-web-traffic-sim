@@ -21,4 +21,9 @@ class IP (
     fun setTerminalId(terminalId: Int) {
         this.terminalId = terminalId
     }
+
+    override fun toString(): String {
+        return "IP(routerID=$routerID, terminalId=$terminalId)"
+    }
+
 }

@@ -37,12 +37,13 @@ class AdminService {
 
             val routerList: MutableList<Router> = readRoutersFromFile(xlWb)
             mapRouterNeighbours(xlWb, routerList)
+            WebSimulator.getInstance().setRouterList(routerList)
+
             val terminalList: MutableList<Terminal> = readTerminalsFromFile(xlWb)
+            WebSimulator.getInstance().setTerminalList(terminalList)
 
             inputStream.close()
             xlWb.close()
-
-            WebSimulator.getInstance(routerList, terminalList)
         } catch (e: Exception) {
             println("Ha ocurrido un error al leer el archivo de excel: ${e.message}")
         }
@@ -67,6 +68,7 @@ class AdminService {
                 if (CommonFunctions.hasData(routerName) && CommonFunctions.hasData(routerId)) {
                     val router = Router(routerId, routerName)
                     routerList.add(router)
+                    initDijkstraVertexes(routerId)
                 }
             } else {
                 eof = true
@@ -110,6 +112,8 @@ class AdminService {
                             router.getOutputBuffer()[neighbourId] = LinkedList()
                         }
                     }
+
+                    initDijkstraEdges(routerId, neighbourId)
                 }
             } else {
                 eof = true
@@ -144,6 +148,9 @@ class AdminService {
                 {
                     val terminal = Terminal(terminalId, terminalName)
                     terminalList.add(terminal)
+                    WebSimulator.getInstance().getRouterList()
+                        .find { router -> router.getRouterId() == terminalRouterId }
+                        ?.let { router -> router.getOutputBufferTerminal()[terminalId] = LinkedList() }
                 }
             } else {
                 eof = true
@@ -155,7 +162,28 @@ class AdminService {
         return terminalList
     }
 
+    /**
+     * Inicializa la lista de aristas del algoritmo de Dijkstra.
+     */
+    private fun initDijkstraEdges(routerId: Int, neighbourId: Int) {
+        val routerPathList: MutableList<Int> = mutableListOf()
+        routerPathList.add(routerId)
+        routerPathList.add(neighbourId)
+        routerPathList.add(getRandomWeight()) // 1 es el peso del camino
 
+        WebSimulator.getInstance().getGraph().getEdges().add(routerPathList)
+    }
+
+    private fun getRandomWeight(): Int {
+        return (1..10).random()
+    }
+
+    /**
+     * Inicializa la lista de vertices del algoritmo de Dijkstra.
+     */
+    private fun initDijkstraVertexes(routerId: Int) {
+        WebSimulator.getInstance().getGraph().getVertexes().add(routerId)
+    }
 
 
 }
