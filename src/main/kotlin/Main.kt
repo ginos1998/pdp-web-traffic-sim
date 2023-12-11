@@ -2,7 +2,9 @@ import controllers.AdminController
 import controllers.PageController
 import controllers.RouterController
 import models.*
+import models.dtos.Graph
 import models.dtos.WebSimulator
+import services.GraphServices
 import utils.ConsoleColors
 
 fun main() {
@@ -11,6 +13,7 @@ fun main() {
     val adminController = AdminController()
     val routerController = RouterController()
     val pageController = PageController()
+    val graphServices = GraphServices()
 
     adminController.readFromExcelFile(filepath)
 
@@ -18,10 +21,13 @@ fun main() {
     var endOfSim = false
     WebSimulator.getInstance().setCicleTime(2)
 
+    val grafo: Graph = WebSimulator.getInstance().getGraph()
+    val routers: MutableList<Router> = WebSimulator.getInstance().getRouterList()
+
     while (!endOfSim) {
+        val somePage = pageController.buildRandomPage()
         WebSimulator.getInstance().getRouterList().forEach { router ->
             println("${ConsoleColors.CYAN}########## ROUTER ${router.getRouterName()} ##########${ConsoleColors.RESET}")
-            val somePage = pageController.buildRandomPage()
 
             val ab = 3 //3 bytes por segundo
 
@@ -47,6 +53,8 @@ fun main() {
             val input = readlnOrNull()
             if (!input.contentEquals("y")) {
                 endOfSim = true
+            } else {
+                graphServices.updateEdges(WebSimulator.getInstance().getGraph(), WebSimulator.getInstance().getRouterList())
             }
         }
     }
@@ -68,6 +76,6 @@ fun printPagesReceivedByTerminal() {
 }
 
 fun printPageToSend(page: Page) {
-    println("${ConsoleColors.BLUE}Pagina a enviar: ${page.getPageContent()} al router ${page.getDestinationIP().getRouterID()}${ConsoleColors.RESET}")
+    println("${ConsoleColors.BLUE}Pagina ${page.getPageId()} a enviar: ${page.getPageContent()} al router ${page.getDestinationIP().getRouterID()}${ConsoleColors.RESET}")
 }
 
