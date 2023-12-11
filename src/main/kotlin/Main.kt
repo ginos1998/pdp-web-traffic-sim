@@ -2,6 +2,7 @@ import controllers.AdminController
 import controllers.PageController
 import controllers.RouterController
 import models.*
+import models.dtos.Graph
 import models.dtos.WebSimulator
 import services.GraphServices
 import utils.ConsoleColors
@@ -19,6 +20,9 @@ fun main() {
     var cicles = 1
     var endOfSim = false
     WebSimulator.getInstance().setCicleTime(2)
+
+    val grafo: Graph = WebSimulator.getInstance().getGraph()
+    val routers: MutableList<Router> = WebSimulator.getInstance().getRouterList()
 
     while (!endOfSim) {
         val somePage = pageController.buildRandomPage()
