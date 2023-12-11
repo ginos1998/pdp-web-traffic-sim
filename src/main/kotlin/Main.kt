@@ -3,6 +3,7 @@ import controllers.PageController
 import controllers.RouterController
 import models.*
 import models.dtos.WebSimulator
+import services.GraphServices
 import utils.ConsoleColors
 
 fun main() {
@@ -11,6 +12,7 @@ fun main() {
     val adminController = AdminController()
     val routerController = RouterController()
     val pageController = PageController()
+    val graphServices = GraphServices()
 
     adminController.readFromExcelFile(filepath)
 
@@ -47,6 +49,8 @@ fun main() {
             val input = readlnOrNull()
             if (!input.contentEquals("y")) {
                 endOfSim = true
+            } else {
+                graphServices.updateEdges(WebSimulator.getInstance().getGraph(), WebSimulator.getInstance().getRouterList())
             }
         }
     }
