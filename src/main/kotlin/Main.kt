@@ -21,9 +21,9 @@ fun main() {
     WebSimulator.getInstance().setCicleTime(2)
 
     while (!endOfSim) {
+        val somePage = pageController.buildRandomPage()
         WebSimulator.getInstance().getRouterList().forEach { router ->
             println("${ConsoleColors.CYAN}########## ROUTER ${router.getRouterName()} ##########${ConsoleColors.RESET}")
-            val somePage = pageController.buildRandomPage()
 
             val ab = 3 //3 bytes por segundo
 
@@ -72,6 +72,6 @@ fun printPagesReceivedByTerminal() {
 }
 
 fun printPageToSend(page: Page) {
-    println("${ConsoleColors.BLUE}Pagina a enviar: ${page.getPageContent()} al router ${page.getDestinationIP().getRouterID()}${ConsoleColors.RESET}")
+    println("${ConsoleColors.BLUE}Pagina ${page.getPageId()} a enviar: ${page.getPageContent()} al router ${page.getDestinationIP().getRouterID()}${ConsoleColors.RESET}")
 }
 

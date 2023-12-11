@@ -8,9 +8,9 @@ class GraphServices {
         val newEdges: MutableList<MutableList<Int>> = mutableListOf()
 
         routers.forEach { router ->
-            val edge: MutableList<Int> = mutableListOf()
-            edge.add(router.getRouterId())
             router.getOutputBuffer().keys.forEach { neighbour ->
+                val edge: MutableList<Int> = mutableListOf()
+                edge.add(router.getRouterId())
                 edge.add(neighbour)
                 router.getOutputBuffer()[neighbour]?.let { edge.add(it.size) }
                 newEdges.add(edge)
