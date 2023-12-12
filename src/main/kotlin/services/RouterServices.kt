@@ -39,7 +39,22 @@ class RouterServices {
             }
         }
 
-        return ready
+        var readyToBuildPage = false
+
+        if (ready) {
+            val pageIdSet = queue.map { it.getPageId() }.toMutableSet()
+            pageIdSet.forEach { pageId ->
+                val totalPackages = queue.filter { it.getPageId() == pageId }.size
+                queue.forEach{pack ->
+                    if (pack.getPageId() == pageId && totalPackages == pack.getTotalPackages()) {
+                        readyToBuildPage = pack.getPackageId() == pack.getTotalPackages() // Si el paquete actual es el ultimo de la pagina
+                    }
+
+                }
+            }
+        }
+
+        return readyToBuildPage
     }
     fun isPackageInDestiny(actualRouter: Router): Boolean {
         var inDestiny = false

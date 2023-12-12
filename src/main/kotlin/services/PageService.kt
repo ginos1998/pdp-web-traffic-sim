@@ -32,7 +32,7 @@ class PageService {
     private fun getRandomTerminal(routerId: Int): Int {
         val routerTerminalList = WebSimulator.getInstance().getRouterList()
             .filter { router -> router.getRouterId() == routerId }
-            .map { router -> router.getOutputBuffer() }
+            .map { router -> router.getOutputBufferTerminal() }
             .map { outputBuffer ->
                 outputBuffer.map { ip -> ip.key }
             }.flatten()

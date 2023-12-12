@@ -21,16 +21,13 @@ fun main() {
     var endOfSim = false
     WebSimulator.getInstance().setCicleTime(2)
 
-    val grafo: Graph = WebSimulator.getInstance().getGraph()
-    val routers: MutableList<Router> = WebSimulator.getInstance().getRouterList()
-
     while (!endOfSim) {
-        val somePage = pageController.buildRandomPage()
         WebSimulator.getInstance().getRouterList().forEach { router ->
             println("${ConsoleColors.CYAN}########## ROUTER ${router.getRouterName()} ##########${ConsoleColors.RESET}")
 
-            val ab = 3 //3 bytes por segundo
+            val ab = 3
 
+            val somePage = pageController.buildRandomPage()
             if (router.getRouterId() == somePage.getOriginIP().getRouterID()) {
                 printPageToSend(somePage)
                 routerController.receivePages(router, somePage)
