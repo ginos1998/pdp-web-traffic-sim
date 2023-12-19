@@ -3,12 +3,12 @@
 ## Introduccion
 Para el trabajo practico numero 2 de _Paradigmas de Programacion_, se prupuso la creacion de un simulador de trafico web. 
 El mismo se realizo en el lenguaje de programacion Kotlin (con jdk-17), utilizando programacion orientada a objetos. 
-La consigna propuesta se encuentra en la siguiente carpeta [enunciado](completar).
+La consigna propuesta se encuentra en la siguiente carpeta [enunciado](https://github.com/ginos1998/pdp-web-traffic-sim/tree/develop/doc/consigna).
 
 ## Desarrollo y funcionamiento
 Para el desarrollo del simulador se siguio el siguiente diagrama de clases, las cuales representan los principales
 modelos del sistema:
-[![Diagrama de clases](completar)
+[![Diagrama de clases](https://github.com/ginos1998/pdp-web-traffic-sim/blob/develop/doc/package.png)
 
 El simulador se ejecuta a partir de la clase `Main`, la cual tiene como primera tarea la lectura de un archivo externo
 para obtener los datos de entrada, como _Routers, Terminales_ y la conexion entre ellos. Este archivo debe seguir el 
